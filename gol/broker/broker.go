@@ -22,6 +22,12 @@ var (
 	servers        []*rpc.Client
 )
 
+/*var nodeAddress = []string{
+	"18.209.56.139:8050", // node3
+	"54.166.107.53:8050", // distlab2
+	"3.88.45.63:8050",    // myservercsa
+}*/
+
 type Broker struct{}
 
 func CountAliveCells(world [][]uint8, BoardWidth int, BoardHeight int) int {
@@ -47,7 +53,6 @@ func makeCallServer(server1 *rpc.Client, world [][]uint8, boardWidth int, boardH
 	response := new(stubs.EvolveResponse)
 	err := server1.Call(stubs.EvolveHandler, request, response)
 	if err != nil {
-		//panic(err)
 		return nil
 	}
 	result <- *response
@@ -97,6 +102,17 @@ func (b *Broker) Quit(req stubs.QuitServerRequest, res *stubs.QuitServerResponse
 		}
 	}
 
+	/*for i := 0; i < 3; i++ {
+		if servers[i] == nil {
+			var err error
+			server, err := rpc.Dial("tcp", nodeAddress[i])
+			if err != nil {
+				panic(err)
+			}
+			servers = append(servers, server)
+		}
+	}*/
+
 	for i := 0; i < 3; i++ {
 		servers[i].Call(stubs.QuitServerHandler, request, response)
 	}
@@ -106,6 +122,14 @@ func (b *Broker) Quit(req stubs.QuitServerRequest, res *stubs.QuitServerResponse
 }
 
 func (b *Broker) Broker(req stubs.BrokerRequest, res *stubs.BrokerResponse) error {
+
+	/*for i := 0; i < 3; i++ {
+		server, err := rpc.Dial("tcp", nodeAddress[i]) // Connect to 3 servers with ports 8050, 8051, 8052
+		if err != nil {
+			panic(err)
+		}
+		servers = append(servers, server)
+	}*/
 
 	for i := 0; i < 3; i++ {
 		server, err := rpc.Dial("tcp", fmt.Sprintf(":805%d", i)) // Connect to 3 servers with ports 8050, 8051, 8052
