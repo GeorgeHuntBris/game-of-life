@@ -1,3 +1,3 @@
-# CSA Coursework: Game of Life skeleton (Go)
+# Conway's Game of Life Simulation
 
-All documentation is available [here](https://uob-csa.github.io/gol-docs/)
+I utilised concurrent and distributed programming methods to provide an efficient simulation of Conway's cellular automaton, Game of Life.
